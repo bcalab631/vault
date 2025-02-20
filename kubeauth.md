@@ -1,41 +1,19 @@
-List of Steps
-Log in to Vault:
+Vault Kubernetes Authentication Backend: Verify that the Vault Kubernetes authentication method is enabled using vault auth list.
 
-Authenticate to Vault using a root token or another valid authentication method.
-Enable Kubernetes Authentication Method:
+Vault Kubernetes Auth Configuration: Ensure Vault is configured with the correct Kubernetes API URL and CA certificate for token validation.
 
-Enable the Kubernetes authentication method in Vault, which allows Kubernetes service account tokens to be used for authentication.
-Obtain Kubernetes API Server URL:
+Kubernetes Service Account Token Authentication: Authenticate using a Kubernetes service account token and verify the successful authentication response from Vault.
 
-Retrieve the URL of the Kubernetes API server used by your OpenShift cluster.
-Obtain Kubernetes CA Certificate:
+Vault Role Bound to Service Account: Ensure a Vault role is correctly bound to a Kubernetes service account and policies are applied.
 
-Fetch the Kubernetes CA certificate used to verify the authenticity of Kubernetes service account tokens.
-Configure Kubernetes Authentication in Vault:
+Vault Policies for Service Account: Verify that the correct Vault policies are assigned to the Kubernetes service account and access is allowed based on policy.
 
-Provide Vault with the Kubernetes API server URL and the CA certificate so that Vault can authenticate using service account tokens.
-Create a Vault Role for Kubernetes Authentication:
+Token Expiration and Renewal: Ensure that Vault issues tokens with correct TTL and supports token renewal before expiration.
 
-Define a Vault role that binds Kubernetes service accounts to specific Vault policies, defining what secrets can be accessed and what permissions are granted.
-Create a Kubernetes Service Account:
+Role Bindings for Multiple Service Accounts: Validate that a single Vault role supports multiple service accounts and each can authenticate.
 
-In OpenShift, create a service account that the application pods will use to authenticate with Vault.
-Create a Kubernetes Role Binding:
+Access Denied for Unauthorized Service Account: Verify that service accounts not bound to the correct role are denied access to Vault.
 
-Optionally, create a role binding for the service account to grant it access to specific Kubernetes resources or namespaces.
-Deploy an Application Pod with the Service Account:
+Authentication with OpenShift Default Service Account: Test authentication using the OpenShift default service account to ensure it is restricted unless explicitly allowed by roles.
 
-Deploy a pod using the created Kubernetes service account so it can authenticate with Vault and access secrets.
-Authenticate with Vault from the Pod:
-
-From inside the pod, authenticate using the Kubernetes service account's token to obtain a Vault token.
-Access Secrets from Vault:
-
-Once authenticated, use the Vault token to retrieve the secrets from Vault, based on the policies assigned to the Kubernetes role.
-Create and Assign Vault Policies:
-
-Define Vault policies that control access to specific secrets or paths, ensuring the correct permissions are assigned to the Kubernetes role.
-Verify Authentication and Secret Access:
-
-Test the authentication and secret access process by attempting to retrieve secrets from Vault using the configured service account.
-By following these steps, OpenShift pods can securely authenticate to Vault and access secrets without storing sensitive data in OpenShift’s ETCD.
+OpenShift Vault Secret Access: Confirm that a Kubernetes pod can retrieve Vault secrets when using the appropriate service account with the correct permissions.
