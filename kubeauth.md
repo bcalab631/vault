@@ -1,19 +1,12 @@
-Vault Kubernetes Authentication Backend: Verify that the Vault Kubernetes authentication method is enabled using vault auth list.
-
-Vault Kubernetes Auth Configuration: Ensure Vault is configured with the correct Kubernetes API URL and CA certificate for token validation.
-
-Kubernetes Service Account Token Authentication: Authenticate using a Kubernetes service account token and verify the successful authentication response from Vault.
-
-Vault Role Bound to Service Account: Ensure a Vault role is correctly bound to a Kubernetes service account and policies are applied.
-
-Vault Policies for Service Account: Verify that the correct Vault policies are assigned to the Kubernetes service account and access is allowed based on policy.
-
-Token Expiration and Renewal: Ensure that Vault issues tokens with correct TTL and supports token renewal before expiration.
-
-Role Bindings for Multiple Service Accounts: Validate that a single Vault role supports multiple service accounts and each can authenticate.
-
-Access Denied for Unauthorized Service Account: Verify that service accounts not bound to the correct role are denied access to Vault.
-
-Authentication with OpenShift Default Service Account: Test authentication using the OpenShift default service account to ensure it is restricted unless explicitly allowed by roles.
-
-OpenShift Vault Secret Access: Confirm that a Kubernetes pod can retrieve Vault secrets when using the appropriate service account with the correct permissions.
+| **Test Case #** | **Test Case**                                  | **Objective** | **Steps** | **Expected Result** |
+|-----------------|------------------------------------------------|---------------|-----------|---------------------|
+| 1               | Vault Kubernetes Authentication Backend       | Ensure Vault Kubernetes auth method is enabled | Verify via `vault auth list` | `kubernetes/` method should be listed as enabled |
+| 2               | Vault Kubernetes Auth Configuration           | Ensure correct configuration with Kubernetes API | Verify Kubernetes API URL and CA cert configuration | Correct configuration with Kubernetes API URL and CA cert |
+| 3               | Kubernetes Service Account Token Authentication | Validate token-based authentication | Use service account token to authenticate | Vault returns a valid authentication token |
+| 4               | Vault Role Bound to Service Account           | Verify Vault role binding with service account | Check role configuration in Vault | Role bound to the correct service account and policies |
+| 5               | Vault Policies for Service Account            | Ensure policies are assigned to service account | Verify policies assigned in Vault role | Correct policies assigned and access granted based on policy |
+| 6               | Token Expiration and Renewal                  | Validate token TTL and renewal process | Check token TTL and renew before expiration | Token expires and renews correctly within TTL |
+| 7               | Role Bindings for Multiple Service Accounts   | Validate role supports multiple service accounts | Test multiple service accounts under a single role | Multiple service accounts can authenticate using the same role |
+| 8               | Access Denied for Unauthorized Service Account | Ensure unauthorized service accounts are denied access | Attempt to authenticate with an unauthorized service account | Vault denies access with "access denied" error |
+| 9               | Authentication with OpenShift Default Service Account | Test default service account authentication | Attempt to authenticate with default service account token | Default service account is denied access unless explicitly allowed |
+| 10              | OpenShift Vault Secret Access                 | Verify Vault secrets can be accessed by Kubernetes pods | Configure pod to retrieve secrets using Vault service account | Pod successfully retrieves Vault secrets with correct policies |
