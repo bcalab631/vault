@@ -3,6 +3,34 @@ kind: Pod
 metadata:
   name: vault-secrets-pod
 spec:
+  containers:
+  - name: my-container
+    image: my-app-image
+    command: ["/bin/sh", "-c", "export DB_PASSWORD=$(cat /mnt/secrets/db-password) && exec my-app"]
+    env:
+      - name: DB_PASSWORD
+        valueFrom:
+          secretKeyRef:
+            name: vault-secrets
+            key: db-password
+    volumeMounts:
+      - name: vault-secrets-store
+        mountPath: /mnt/secrets
+  volumes:
+    - name: vault-secrets-store
+      csi:
+        driver: secrets-store.csi.k8s.io
+        volumeHandle: vault-secrets-store
+        readOnly: true
+        volumeAttributes:
+          secretProviderClass: "vault-secrets"  # Reference the SecretProviderClass
+
+###################################################
+apiVersion: v1
+kind: Pod
+metadata:
+  name: vault-secrets-pod
+spec:
   initContainers:
   - name: init-env
     image: busybox
