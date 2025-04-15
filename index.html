@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vault Secrets Viewer and Patcher</title>
+</head>
+<body>
+    <h1>Vault Secrets Viewer and Patcher</h1>
+
+    <!-- Form to List Secrets -->
+    <form method="POST" action="/list_secrets">
+        <h2>List Secrets</h2>
+        <label for="token">Vault Token:</label><br>
+        <input type="text" id="token" name="token" required><br><br>
+        
+        <label for="secret_path">Secret Path (e.g., secret/data/my-secret):</label><br>
+        <input type="text" id="secret_path" name="secret_path" required><br><br>
+        
+        <input type="submit" value="List Secrets">
+    </form>
+
+    <!-- Form to Patch Secrets -->
+    <form method="POST" action="/patch_secret">
+        <h2>Patch Secret</h2>
+        <label for="token">Vault Token:</label><br>
+        <input type="text" id="token" name="token" required><br><br>
+        
+        <label for="secret_path">Secret Path (e.g., secret/data/my-secret):</label><br>
+        <input type="text" id="secret_path" name="secret_path" required><br><br>
+        
+        <label for="secret_key">Secret Key:</label><br>
+        <input type="text" id="secret_key" name="secret_key" required><br><br>
+        
+        <label for="new_value">New Value:</label><br>
+        <input type="text" id="new_value" name="new_value" required><br><br>
+        
+        <input type="submit" value="Update Secret">
+    </form>
+
+    <!-- Display secrets if available -->
+    {% if secrets %}
+        <h2>Secrets at Path: {{ secret_path }}</h2>
+        <ul>
+            {% for key, value in secrets.items() %}
+                <li><strong>{{ key }}:</strong> {{ value }}</li>
+            {% endfor %}
+        </ul>
+    {% endif %}
+
+    <!-- Display success message if the patch was successful -->
+    {% if success %}
+        <p style="color:green;">{{ success }}</p>
+    {% endif %}
+
+    <!-- Display error message if there was an error -->
+    {% if error %}
+        <p style="color:red;">Error: {{ error }}</p>
+    {% endif %}
+
+    {% if token and secret_path %}
+        <p>Showing results for Path: {{ secret_path }}</p>
+    {% endif %}
+</body>
+</html>

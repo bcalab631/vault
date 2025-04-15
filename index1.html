@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vault Secrets</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/4.5.2/css/bootstrap.min.css">
+</head>
+<body>
+    <div class="container">
+        <h1 class="my-4">Enter Vault Token and Secret Path</h1>
+
+        <!-- Form to input Vault Token and Secret Path -->
+        <form method="POST">
+            <div class="form-group">
+                <label for="vault_token">Vault Token</label>
+                <input type="text" class="form-control" id="vault_token" name="vault_token" required>
+            </div>
+
+            <div class="form-group mt-3">
+                <label for="secret_path">Secret Path</label>
+                <input type="text" class="form-control" id="secret_path" name="secret_path" required>
+            </div>
+
+            <button type="submit" class="btn btn-primary mt-3">Fetch Secrets</button>
+        </form>
+
+        {% if error %}
+            <div class="alert alert-danger mt-4" role="alert">
+                {{ error }}
+            </div>
+        {% endif %}
+
+        {% if secrets is not none %}
+        <h2 class="my-4">Secrets Found:</h2>
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th scope="col">#</th>
+                    <th scope="col">Secret Name</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% if secrets %}
+                    {% for secret in secrets %}
+                        <tr>
+                            <th scope="row">{{ loop.index }}</th>
+                            <td>{{ secret }}</td>
+                        </tr>
+                    {% endfor %}
+                {% else %}
+                    <tr>
+                        <td colspan="2" class="text-center">No secrets found</td>
+                    </tr>
+                {% endif %}
+            </tbody>
+        </table>
+        {% endif %}
+    </div>
+</body>
+</html>

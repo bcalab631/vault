@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vault Secrets Viewer</title>
+</head>
+<body>
+    <h1>Vault Secrets Viewer</h1>
+    <form method="POST" action="/list_secrets">
+        <label for="token">Vault Token:</label><br>
+        <input type="text" id="token" name="token" required><br><br>
+        
+        <label for="secret_path">Secret Path (e.g., secret/data/my-secret):</label><br>
+        <input type="text" id="secret_path" name="secret_path" required><br><br>
+        
+        <input type="submit" value="List Secrets">
+    </form>
+
+    {% if secrets %}
+        <h2>Secrets at Path: {{ secret_path }}</h2>
+        <ul>
+            {% for key, value in secrets.items() %}
+                <li><strong>{{ key }}:</strong> {{ value }}</li>
+            {% endfor %}
+        </ul>
+    {% endif %}
+
+    {% if error %}
+        <p style="color:red;">Error: {{ error }}</p>
+    {% endif %}
+
+    {% if token and secret_path %}
+        <p>Showing results for Path: {{ secret_path }}</p>
+    {% endif %}
+</body>
+</html>
