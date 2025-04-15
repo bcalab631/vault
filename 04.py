@@ -1,18 +1,17 @@
 import requests
 
+# Vault config
 vault_addr = "http://127.0.0.1:8200"
-vault_token = "s.yourVaultTokenHere"
-base_path = "secret"  # Change if your mount is different, e.g., 'kv'
+vault_token = "hvs.xxxx"
+mount = "secret"  # KV v2 mount point
+start_path = "test/"  # Path under /v1/secret/metadata/
 
 headers = {
-    "X-Vault-Token": "hvs.xxxxxx"
+    "X-Vault-Token": vault_token
 }
 
 def list_kv2_secrets(path):
-    """
-    Recursively lists all secrets and subpaths under a given KV v2 path.
-    """
-    url = f"{vault_addr}/v1/{base_path}/metadata/{path}?list=true"
+    url = f"{vault_addr}/v1/{mount}/metadata/{path}?list=true"
     response = requests.get(url, headers=headers)
 
     if response.status_code == 200:
@@ -21,11 +20,11 @@ def list_kv2_secrets(path):
             full_path = f"{path}{key}"
             if key.endswith('/'):
                 print(f"📁 {full_path}")
-                list_kv2_secrets(full_path)  # Recurse into subpath
+                list_kv2_secrets(full_path)  # Recursively go deeper
             else:
                 print(f"🔑 {full_path}")
     else:
-        print(f"Failed to list {path}: {response.status_code} {response.text}")
+        print(f"❌ Could not list {path}: {response.status_code} - {response.text}")
 
-# Start at the root
-list_kv2_secrets("")
+# Start from 'test/'
+list_kv2_secrets("test/")
