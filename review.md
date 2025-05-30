@@ -19,6 +19,14 @@ Proactively pursued professional development by completing the GCP Associate Clo
 
 I completed the Pluralsight courses "Docker Deep Dive" and "Docker and Kubernetes: The Big Picture" to improve my knowledge of containerization and orchestration. This knowledge has improved my ability to contribute to the Openshift integration with Hashicorp Vault.
 
+Recognition for Team Impact: Seongyong Kim and Nathan Poorman sent me two eCards to recognize my remarkable work and positive role in the team. These awards reflect the importance of my efforts, teamwork, and commitment to advancing team objectives.
+
+6. Others:
+
+Git Commits: Made sure to maintain a strict development process by committing at least 15 Git files every month. 
+
+Adherence to Return-to-Office (RTO) Policy: Fulfilled the organization's RTO mandate to work from the office three days a week. demonstrated commitment, accountability, and dedication to teamwork and company policies.
+
 Summary of Key Accomplishments (Midyear):
 
 Secrets Management Leadership: Led the integration of the ETS application and OpenShift platform with HashiCorp Vault by completing successful proof-of-concepts (POCs). Designed secure, fault-tolerant solutions using Vault Proxy and Vault Agent Injector, enabling automated and resilient secrets handling in production-like environments.
