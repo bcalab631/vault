@@ -94,6 +94,8 @@ Fully met the 3-day-a-week return-to-office policy without exception, demonstrat
 Let me know if you'd like a shorter version or tailored to a specific performance category (e.g., innovation, delivery, leadership).
 
 
+Using Vault Agent Injector, I oversaw the integration of OpenShift with HashiCorp Vault, eliminating security concerns by getting rid with secret storage in etcd. analyzed integration alternatives in-depth to find the best scalable and safe solution. A reliable, repeatable pattern for safe secret management in OpenShift workloads was established by implementing and testing the solution in a controlled testing environemtn.
+
 
 
 
