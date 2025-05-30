@@ -37,4 +37,66 @@ Operational Reliability: Took a lead role in on-call support for Vault, respondi
 
 Ongoing Skill Development: Completed the GCP Associate Cloud Engineer training (exam scheduled for June 15) and Pluralsight courses on Docker and Kubernetes fundamentals. These learning efforts enhanced technical knowledge in cloud infrastructure, containerization, and application platform integration.
 
+Project Leadership & Technical Implementation
+ETS Integration with HashiCorp Vault:
+
+Led secure integration of ETS (hosted in PICO data center) with HashiCorp Vault for secrets management.
+
+Developed and implemented a fault-tolerant Vault Proxy solution allowing local access to cached secrets during outages.
+
+Delivered final design documentation to application owners, enhancing security and resiliency.
+
+OpenShift & Vault Integration POC:
+
+Spearheaded a proof of concept to integrate OpenShift with HashiCorp Vault using the Vault Agent Injector.
+
+Conducted comparative analysis of multiple Vault integration options (Agent Injector, CSI Driver, Secret Operator).
+
+Developed a secure, automated secrets injection system for OpenShift pods, avoiding secrets stored in etcd.
+
+Delivered a reusable pattern for future OpenShift-Vault integrations.
+
+Vault Disaster Recovery Setup:
+
+Deployed a Vault DR cluster for the new data center ahead of schedule.
+
+Followed best practices for failover, replication, and resilience, supporting enterprise-grade secret management.
+
+Operational Support
+On-Call Responsibilities:
+
+Provided critical on-call support for Vault-related alerts and incidents.
+
+Resolved time-sensitive issues and collaborated with teams to ensure system stability and uptime.
+
+Skill Development
+Completed:
+
+GCP Associate Cloud Engineer training (exam scheduled for June 15)
+
+Pluralsight courses: “Docker Deep Dive” and “Docker and Kubernetes: The Big Picture”
+
+Gained hands-on skills in cloud infrastructure, containerization, and orchestration to support Vault integrations and OpenShift work.
+
+Recognition & Professionalism
+Peer Recognition:
+
+Received eCards from Seongyong Kim and Nathan Poorman for outstanding work and collaboration.
+
+Development Discipline:
+
+Maintained a minimum of 15 Git commits per month, ensuring consistent technical contribution.
+
+RTO Compliance:
+
+Fully met the 3-day-a-week return-to-office policy without exception, demonstrating dependability and team engagement.
+
+Let me know if you'd like a shorter version or tailored to a specific performance category (e.g., innovation, delivery, leadership).
+
+
+
+
+
+
+
 
