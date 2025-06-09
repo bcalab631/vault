@@ -119,3 +119,11 @@ Monitoring Vault Injector logs and health.
 
 6. Conclusion
 The POC successfully demonstrated the integration of HashiCorp Vault with OpenShift using Vault Agent Injector for dynamic secret injection. It validates the approach as secure, manageable, and scalable for enterprise applications.
+
+Subject: Completion of POC: OpenShift Integration with HashiCorp Vault
+
+We have successfully completed our proof of concept (POC) for integrating OpenShift with HashiCorp Vault for secure secret management, utilizing the Vault Agent Injector. During the POC, we evaluated both the Vault CSI provider and the Vault Agent Injector. Based on our testing and analysis, we identified the Vault Agent Injector as the more feasible and secure solution for our use case.
+
+The outcomes, implementation details, and evaluation results from the POC have been documented on the following Confluence page: [Insert Confluence Link]
+
+Please review the documentation at your convenience. Let us know if you have any questions or require further clarification.
