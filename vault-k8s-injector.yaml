@@ -1,0 +1,122 @@
+# -------------------------------
+# 1. Namespace: Where all vault-related resources live
+# -------------------------------
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: vault
+---
+# -------------------------------
+# 2. Service Account for Vault Agent Injector
+# Used by the injector deployment
+# -------------------------------
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: vault-k8s
+  namespace: vault
+---
+# -------------------------------
+# 3. Cluster Role: Permissions for injector to access Kubernetes resources
+# -------------------------------
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: vault-k8s
+rules:
+  - apiGroups: [""]
+    resources: ["pods", "secrets", "namespaces"]
+    verbs: ["get", "list", "watch"]
+  - apiGroups: ["admissionregistration.k8s.io"]
+    resources: ["mutatingwebhookconfigurations"]
+    verbs: ["get", "list", "watch"]
+---
+# -------------------------------
+# 4. Cluster Role Binding: Binds above role to the service account
+# -------------------------------
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: vault-k8s
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: vault-k8s
+subjects:
+  - kind: ServiceAccount
+    name: vault-k8s
+    namespace: vault
+---
+# -------------------------------
+# 5. Vault Agent Injector Deployment
+# Uses local image vault-k8s-2:local loaded into Minikube
+# -------------------------------
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: vault-k8s
+  namespace: vault
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: vault-k8s
+  template:
+    metadata:
+      labels:
+        app: vault-k8s
+    spec:
+      serviceAccountName: vault-k8s
+      containers:
+        - name: vault-k8s
+          image: vault-k8s-2:local
+          imagePullPolicy: IfNotPresent
+          command: ["/vault-k8s"]
+          args: ["server"]
+          ports:
+            - containerPort: 8080
+              name: http
+---
+# -------------------------------
+# 6. Service: Exposes the Vault Agent Injector internally
+# Required for webhook to reach it
+# -------------------------------
+apiVersion: v1
+kind: Service
+metadata:
+  name: vault-k8s
+  namespace: vault
+spec:
+  selector:
+    app: vault-k8s
+  ports:
+    - protocol: TCP
+      port: 443       # Service port (used in webhook)
+      targetPort: 8080  # Port used by injector container
+---
+# -------------------------------
+# 7. Mutating Webhook Configuration
+# Registers Vault Agent Injector as a webhook with the Kube API
+# Replace <BASE64_ENCODED_CA_CERT> with actual base64-encoded cert.pem
+# -------------------------------
+apiVersion: admissionregistration.k8s.io/v1
+kind: MutatingWebhookConfiguration
+metadata:
+  name: vault-k8s-webhook
+webhooks:
+  - name: vault-k8s.vault.svc
+    clientConfig:
+      service:
+        name: vault-k8s
+        namespace: vault
+        path: "/mutate"   # This is the expected endpoint on the injector
+        port: 443
+      caBundle: <BASE64_ENCODED_CA_CERT>  # Replace this with actual base64 cert
+    admissionReviewVersions: ["v1", "v1beta1"]
+    sideEffects: None
+    rules:
+      - operations: ["CREATE"]
+        apiGroups: [""]
+        apiVersions: ["v1"]
+        resources: ["pods"]
+    failurePolicy: Fail
