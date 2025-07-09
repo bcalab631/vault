@@ -1,0 +1,40 @@
+Test Case 1: Vault License Consumption with alias_name_source = serviceaccount_uid
+Objective:
+Verify that Vault license consumption is tied to the Service Account UID, not just the Service Account name, when using Kubernetes authentication with alias_name_source = serviceaccount_uid.
+
+✅ Preconditions
+Vault is properly set up with Kubernetes auth method enabled.
+
+Vault enterprise license is in use and license usage metrics are accessible.
+
+Vault Kubernetes auth role is configured with alias_name_source = serviceaccount_uid.
+
+| Step | Description                                                                         | Expected Result                                                 |
+| ---- | ----------------------------------------------------------------------------------- | --------------------------------------------------------------- |
+| 1    | Create a new OCP ServiceAccount named `cml16-license-sa`.                           | ServiceAccount is successfully created in the target namespace. |
+| 2    | Configure Vault Kubernetes auth role with `alias_name_source = serviceaccount_uid`. | Auth role is created with correct parameters.                   |
+| 3    | List the UID of the created ServiceAccount.                                         | UID is recorded (e.g., `uid-1234`).                             |
+| 4    | Deploy a pod using `cml16-license-sa` ServiceAccount.                               | Pod is successfully running using the ServiceAccount.           |
+| 5    | Ensure Vault token is requested and authenticated from the pod.                     | Authentication succeeds.                                        |
+| 6    | Check Vault license usage (`vault license status`).                                 | **1 license** consumed (one unique UID used).                   |
+| 7    | Deploy another pod with the **same** ServiceAccount.                                | Pod is running and authenticates to Vault.                      |
+| 8    | Check Vault license usage.                                                          | Still **1 license** consumed (same UID reused).                 |
+| 9    | Delete and recreate the same-named ServiceAccount (`cml16-license-sa`).             | New ServiceAccount has a **different UID**.                     |
+| 10   | Deploy pod using the new ServiceAccount.                                            | Pod authenticates to Vault with new UID.                        |
+| 11   | Check Vault license usage.                                                          | **2 licenses** consumed (new UID counted as separate identity). |
+
+
+✅ Validation
+Vault associates clients by identity alias.
+
+When alias_name_source = serviceaccount_uid, Vault uses the UID of the Kubernetes service account for alias creation.
+
+Even if the name of the service account is reused, a new UID results in a new client entry in Vault, consuming an additional license.
+
+🧠 Conclusion
+Vault client licensing is UID-based when using alias_name_source = serviceaccount_uid.
+
+This ensures that even if a ServiceAccount is deleted and recreated with the same name, it is treated as a distinct identity by Vault.
+
+This test case validates the correct behavior of Vault's licensing mechanism in Kubernetes environments.
+
