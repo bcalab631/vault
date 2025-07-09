@@ -1,0 +1,37 @@
+🔄 Summary: Vault Kubernetes License Consumption Test Cases
+✅ Test Case 1: alias_name_source = serviceaccount_uid
+🔍 Purpose
+To verify that Vault license consumption is based on the UID of a Kubernetes service account.
+
+⚙️ Behavior Observed
+Vault consumes 1 license per unique service account UID.
+
+Deploying multiple pods with the same ServiceAccount (same UID) → no extra license used.
+
+Deleting and recreating the ServiceAccount (generates a new UID) → additional license consumed.
+
+🧠 Conclusion
+Vault treats each unique UID as a new identity, consuming a separate license. This behavior is useful when enforcing strict identity boundaries, but can increase license usage in environments where ServiceAccounts are frequently recreated.
+
+✅ Test Case 2: alias_name_source = serviceaccount_name
+🔍 Purpose
+To verify that Vault license consumption is based on the name of a Kubernetes service account, regardless of UID.
+
+⚙️ Behavior Observed
+Vault consumes 1 license per unique service account name.
+
+Multiple pods using the same ServiceAccount → no extra license consumed.
+
+Deleting and recreating the ServiceAccount (new UID, same name) → no extra license consumed.
+
+🧠 Conclusion
+Vault identifies clients based on service account name, not UID. This approach is efficient for environments with dynamic or recreated service accounts, reducing license usage at the cost of granularity.
+
+📊 Comparison Table
+| Feature                      | `serviceaccount_uid`       | `serviceaccount_name`        |
+| ---------------------------- | -------------------------- | ---------------------------- |
+| **License Bound To**         | ServiceAccount UID         | ServiceAccount Name          |
+| **Multiple Pods w/ Same SA** | 1 license                  | 1 license                    |
+| **Recreate SA (new UID)**    | New license consumed       | No new license consumed      |
+| **Granularity**              | High (per UID)             | Low (per name)               |
+| **License Efficiency**       | Lower (more licenses used) | Higher (fewer licenses used) |
