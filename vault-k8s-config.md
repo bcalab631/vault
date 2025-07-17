@@ -1,3 +1,10 @@
+Legacy tokens are static and do not expire unless manually rotated. They don’t include audience (aud) claims.
+
+Projected tokens are dynamically issued by the Kubernetes API, short-lived (usually 1h), and automatically rotated.
+
+Bound tokens include audience and expiration claims, improving security by limiting token scope and lifetime.
+
+
 | Section                             | Parameter                             | Required | Description                                                                 |
 |-------------------------------------|----------------------------------------|----------|-----------------------------------------------------------------------------|
 | **Vault Auth Method Config**        | `token_reviewer_jwt`                   | ✅        | JWT used by Vault to authenticate with the Kubernetes TokenReview API.     |
