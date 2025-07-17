@@ -4,6 +4,26 @@ Projected tokens are dynamically issued by the Kubernetes API, short-lived (usua
 
 Bound tokens include audience and expiration claims, improving security by limiting token scope and lifetime.
 
+# Legacy Token vs. Manually Created Token
+
+| Feature                      | Legacy Token                                                | Manually Created Token                                         |
+|-----------------------------|--------------------------------------------------------------|----------------------------------------------------------------|
+| **Creation Method**         | Automatically created with the ServiceAccount               | Created via `oc create token` or Kubernetes TokenRequest API   |
+| **Storage Location**        | Stored as a Secret (`kubernetes.io/service-account-token`)  | Not stored; returned directly to user                          |
+| **Mounting in Pods**        | Auto-mounted by default into pods                           | Not auto-mounted; must be injected manually                    |
+| **Lifetime**                | Long-lived (until deleted)                                  | Short-lived (default 1h; configurable)                         |
+| **Revocation**              | Must delete Secret manually                                 | Expires automatically; can be revoked                         |
+| **Token Audience Support**  | ❌ Not supported                                              | ✅ Supported                                                   |
+| **Rotation Support**        | ❌ No automatic rotation                                     | ✅ Can be refreshed                                            |
+| **Use Case**                | Pod-to-API communication (default)                          | External use (CI/CD, scripts, short-term access)              |
+| **Security Risk**           | Higher – long-lived, widely accessible                      | Lower – scoped, time-limited, not stored                      |
+| **Projected Token Support** | ❌ No                                                       | ✅ Yes                                                         |
+
+## Summary
+
+- **Legacy Tokens**: Automatically handled, long-lived, suitable for internal pod use but less secure.
+- **Manually Created Tokens**: Explicitly requested, short-lived, better for external or automation use cases.
+
 
 | Section                             | Parameter                             | Required | Description                                                                 |
 |-------------------------------------|----------------------------------------|----------|-----------------------------------------------------------------------------|
