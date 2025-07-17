@@ -1,0 +1,50 @@
++----------------------------------------------------+
+|              OCP Engineering Team                  |
+|        (Provides Kubernetes Integration Data)      |
++----------------------------------------------------+
+            |
+            | Provides:
+            | - Kubernetes API endpoint (`kubernetes_host`)
+            | - Kubernetes CA certificate (`kubernetes_ca_cert`)
+            | - JWT token (`token_reviewer_jwt`)
+            | - Service Account name & namespace
+            v
++----------------------------------------------------+
+|             Vault Engineering Team                 |
+|     (Configures Vault Kubernetes Auth Method)      |
++----------------------------------------------------+
+            |
+            | Uses the data from OCP team to:
+            | - Configure Vault Auth Method
+            | - Create Vault Roles
+            v
++----------------------------+
+| Enable Kubernetes Auth     |
+| `vault auth enable kubernetes` |
++----------------------------+
+            |
+            v
++----------------------------------------------------+
+| Write Auth Method Config:                          |
+| `vault write auth/kubernetes/config \`             |
+|     `token_reviewer_jwt=<JWT>`                     |
+|     `kubernetes_host=<API>`                        |
+|     `kubernetes_ca_cert=<CA>`                      |
++----------------------------------------------------+
+            |
+            v
++----------------------------------------------------+
+| Create Vault Role Mapping:                         |
+| `vault write auth/kubernetes/role/<role> \`        |
+|     `bound_service_account_names=<SA>`             |
+|     `bound_service_account_namespaces=<NS>`        |
+|     `policies=<Vault Policies>`                    |
++----------------------------------------------------+
+            |
+            v
++----------------------------------------------------+
+| Application Pod in OCP                             |
+|  → Uses Service Account                            |
+|  → Vault Agent / SDK uses Kubernetes Auth to login |
+|  → Gets Vault Token                                |
++----------------------------------------------------+
