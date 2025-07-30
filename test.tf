@@ -1,11 +1,26 @@
-data "external" "jwt" {
-  program = ["sh", "-c", <<EOT
-echo '{ "jwt": "'"$TFE_JOB_JWT"'" }'
-EOT
-  ]
+variable "vault_addr" {
+  type    = string
+  default = "https://vault.example.com"
 }
 
-output "tfe_job_jwt" {
-  value = data.external.jwt.result["jwt"]
+variable "vault_role_id" {
+  type      = string
   sensitive = true
+}
+
+variable "vault_secret_id" {
+  type      = string
+  sensitive = true
+}
+
+provider "vault" {
+  address = var.vault_addr
+
+  auth_login {
+    path = "auth/approle/login"
+    parameters = {
+      role_id   = var.vault_role_id
+      secret_id = var.vault_secret_id
+    }
+  }
 }
